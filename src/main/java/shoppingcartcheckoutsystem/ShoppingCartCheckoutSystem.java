@@ -34,6 +34,7 @@ public class ShoppingCartCheckoutSystem {
 			List<String> availableShopItems = shopItems.stream().map(s -> s.getShopItemName().toLowerCase()).collect(Collectors.toList());
 			System.out.println("\nAvailable Items: " + availableShopItems.toString());
 			
+			boolean discountToApply;
 			String stringItems;
 			List<String> requestedItems;
 			List<String> items;
@@ -55,11 +56,24 @@ public class ShoppingCartCheckoutSystem {
 				else 
 					break;
 			}
-					
+			
 			//List<String> items = Arrays.asList("Apple", "Apple", "Orange", "Apple");
 			
+			while(true) {
+				System.out.print("\nWould you like to apply store discounts? (Yes/No): ");
+				String discount = sc.nextLine();
+				if(!discount.isEmpty() && discount.equalsIgnoreCase("YES")) {
+					discountToApply = true;
+					break;
+				} else if(!discount.isEmpty() && discount.equalsIgnoreCase("NO")) {
+					discountToApply = false;
+					break;
+				} else
+					System.out.println("Please enter either Yes or No...! ");
+			}
+			
 			System.out.println("\nList of items to checkout: " + items.toString());
-			System.out.println("Total: \u00A3" + checkoutController.getTotal(items));
+			System.out.println("Total: \u00A3" + checkoutController.getTotal(items, discountToApply));
 			
 		} catch(Exception e) {
 			//e.printStackTrace();

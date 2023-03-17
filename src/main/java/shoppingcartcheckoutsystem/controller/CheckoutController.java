@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import shoppingcartcheckoutsystem.service.CheckoutService;
+import shoppingcartcheckoutsystem.service.impl.DiscountedCheckoutService;
 import shoppingcartcheckoutsystem.service.impl.SimpleCheckoutService;
 
 public class CheckoutController {
@@ -18,7 +19,7 @@ public class CheckoutController {
 
 	private CheckoutService checkoutService;
 	
-	public BigDecimal getTotal(List<String> items) {
+	public BigDecimal getTotal(List<String> items, boolean discountToApply) {
 		logger.info("getTotal() called");
 		Map<String, Long> groupedItems =  items.stream().map(i -> i.toLowerCase()).collect(
                 Collectors.groupingBy(
@@ -27,7 +28,10 @@ public class CheckoutController {
         );
 		
 		BigDecimal total = null;
-		checkoutService = new SimpleCheckoutService();
+		if(discountToApply) 
+			checkoutService = new DiscountedCheckoutService();
+		else 
+			checkoutService = new SimpleCheckoutService();
 		
 		try {
 			total = checkoutService.calculateTotal(groupedItems);
